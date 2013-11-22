@@ -14,10 +14,11 @@ fi
 
 # report time when the process takes over 3 seconds
 REPORTTIME=3
+
 # enable completion in --prefix=~/local or whatever
 setopt magic_equal_subst
 
-## Movement {{{
+# Movement {{{
 WORDCHARS=${WORDCHARS:s,/,,} # Exclude / so you can delete path with ^W
 setopt auto_cd               # Automatically change directory when path has input
 setopt auto_pushd            # Automatically push previous directory to stack
@@ -26,7 +27,7 @@ setopt auto_pushd            # Automatically push previous directory to stack
 setopt pushd_ignore_dups     # Ignore duplicate directory in pushd
 #}}}
 
-## History {{{
+# History {{{
 HISTFILE=${ZDOTDIR}/.zsh_history
 HISTSIZE=10000000
 SAVEHIST=$HISTSIZE
@@ -40,7 +41,7 @@ setopt share_history         # share history in zsh processes
 setopt no_flow_control       # do not use C-s/C-q
 #}}}
 
-### Completion {{{
+# Completion {{{
 autoload -Uz compinit && compinit
 
 setopt complete_in_word      # complete at carret position
@@ -115,36 +116,6 @@ case $(uname) in
 esac
 #}}}
 
-## Color Files/Directorys in ls and completion {{{
-case "${TERM}" in
-xterm|xterm-color)
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm-color)
-    stty erase '^H'
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm)
-    stty erase '^H'
-    ;;
-cons25)
-    unset LANG
-    export LSCOLORS=ExFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-jfbterm-color)
-    export LSCOLORS=gxFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;36:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;36;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-esac
-#}}}
-
 # Key mappings {{{
 bindkey -v
 
@@ -206,41 +177,45 @@ zle -A .backward-kill-word vi-backward-kill-word
 zle -A .backward-delete-char vi-backward-delete-char
 # }}}
 
-# Load zshrc.d
+# Load extra settings and plugins {{{
 for filename in ${ZDOTDIR}/zshrc.d/*.zsh; do
     source ${filename}
 done
 
-# j {{{
-# Treat hook functions as array
-autoload -Uz is-at-least
-typeset -ga chpwd_functions
-typeset -ga precmd_functions
-typeset -ga preexec_functions
-
-# Simulate hook functions for older versions
-if ! is-at-least 4.2.7; then
-  function chpwd() { local f; for f in $chpwd_functions; do $f; done }
-  function precmd() { local f; for f in $precmd_functions; do $f; done }
-  function preexec() { local f; for f in $preexec_functions; do $f; done }
-fi
-
-# z - jump around {{{2
-# https://github.com/rupa/z
 _Z_CMD=j
 _Z_DATA=$ZDOTDIR/.z
-if is-at-least 4.3.9; then
-    Bundle rupa/z
-else
-  _Z_NO_PROMPT_COMMAND=1
-    Bundle rupa/z && {
-    function precmd_z() {
-        _z --add "$(pwd -P)"
-    }
-    precmd_functions+=precmd_z
-  }
-fi
-test $? || unset _Z_CMD _Z_DATA _Z_NO_PROMPT_COMMAND
+Bundle rupa/z
+Bundle zsh-users/zsh-syntax-highlighting
+
+# zsh-prompt-powerline {{{
+fpath+=( ${ZDOTDIR}/zsh-prompt-powerline )
+autoload promptinit; promptinit
+
+# only show username on remote server or if it's different from my default
+[[ -n $SSH_CONNECTION || $USER == alisue ]] && zstyle ':prompt:powerline:ps1' hide-user 1
+
+# enable check-for-changes
+zstyle :'vcs_info:*powerline:*' check-for-changes true
+
+zstyle ':prompt:powerline:ps1' sep1-char ''
+zstyle ':prompt:powerline:ps1' sep2-char ''
+zstyle ':prompt:powerline:ps1' lock-char ''
+zstyle ':prompt:powerline:ps1' branch-char ''
+
+prompt powerline
 #}}}
 
-Bundle zsh-users/zsh-syntax-highlighting
+# LS_COLORS {{{
+Bundle seebi/dircolors-solarized
+export LS_COLORS
+DIRCOLORS="${ZDOTDIR}/bundle/dircolors-solarized/dircolors.ansi-dark"
+if type dircolors > /dev/null 2>&1; then
+    eval $(dircolors ${DIRCOLORS})
+elif type gdircolors > /dev/null 2>&1; then
+    eval $(gdircolors ${DIRCOLORS})
+fi
+if [ -n "$LS_COLORS" ]; then
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
+#}}}
+#}}}

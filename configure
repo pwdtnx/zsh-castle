@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# define XDG_CONFIG_HOME
+if [[ "$XDG_CONFIG_HOME" == "" ]]; then
+    XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+ROOT="${XDG_CONFIG_HOME}/zsh"
+BUNDLE="${ROOT}/bundle"
+
+bundle(){
+    AUTHOR=$1; shift
+    REPOS=$1; shift
+    URL="https://github.com/${AUTHOR}/${REPOS}"
+    DST="${BUNDLE}/${REPOS}"
+    if [[ ! -d "${DST}" ]]; then
+        git clone ${URL} "${DST}"
+    fi
+}
+
+# create bundle directory
+mkdir -p "${BUNDLE}"
+
+# clone plugins
+bundle rupa z
+bundle Valodim zsh-prompt-powerline
+bundle zsh-users zsh-syntax-highlighting

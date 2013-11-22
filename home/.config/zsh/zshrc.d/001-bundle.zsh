@@ -56,6 +56,8 @@ BundleLocal() {
         source ${bundle_root}/${name}/${name}.sh
     elif [[ -f "${bundle_root}/${name}/${name}" ]]; then
         source ${bundle_root}/${name}/${name}
+    else
+        fpath+=( ${bundle_root}/${name} )
     fi
     # load config
     if [[ -f "${bundle_conf}/${name}.zsh" ]]; then

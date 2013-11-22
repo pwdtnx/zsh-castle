@@ -25,6 +25,9 @@ if [[ $(id -u) -eq 0 ]]; then
     path=($sudo_path $path)
 fi
 
+# Add completion path
+fpath=($HOME/.homesick/repos/homeshick/completions(N-/) $fpath)
+
 typeset -U manpath
 manpath=(
     $HOME/.local/share/man(N-/)

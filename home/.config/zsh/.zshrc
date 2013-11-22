@@ -186,9 +186,11 @@ _Z_CMD=j
 _Z_DATA=$ZDOTDIR/.z
 Bundle rupa/z
 Bundle zsh-users/zsh-syntax-highlighting
+Bundle zsh-users/zsh-completions
+fpath=(${ZDOTDIR}/zsh-completions/src $fpath)
 
 # zsh-prompt-powerline {{{
-fpath+=( ${ZDOTDIR}/zsh-prompt-powerline )
+fpath=(${ZDOTDIR}/zsh-prompt-powerline $fpath)
 autoload promptinit; promptinit
 
 # only show username on remote server or if it's different from my default

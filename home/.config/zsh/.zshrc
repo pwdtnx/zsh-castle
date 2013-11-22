@@ -40,9 +40,8 @@ setopt share_history         # share history in zsh processes
 setopt no_flow_control       # do not use C-s/C-q
 #}}}
 
-## Completion {{{
-autoload -Uz compinit
-compinit
+### Completion {{{
+autoload -Uz compinit && compinit
 
 setopt complete_in_word      # complete at carret position
 setopt glob_complete         # complete without expanding glob
@@ -50,13 +49,12 @@ setopt hist_expand           # expand history when complete
 setopt correct               # show suggestion list when user type wrong command
 setopt list_packed           # show completion list smaller (pack)
 setopt nolistbeep            # stop beep.
-setopt complete_aliases      # include aliases in completion list
 setopt noautoremoveslash     # do not remove postfix slash of command line
 
 # ambiguous completion search when no match found
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z} r:|[._-]=*'
 
-# allow to select suggestions with arrow keys (or hijk with 'key-config.zsh')
+# allow to select suggestions with arrow keys
 zstyle ':completion:*:default' menu select
 
 # color completion list
@@ -85,7 +83,7 @@ zstyle ':completion:*' verbose yes
 # - _approximate:   complete from approximate suggestions
 # - _prefix:        complete without caring the characters after carret
 zstyle ':completion:*' completer _oldlist _complete \
-    _match _history _ignored _approximate _prefix
+    _match _history _ignored _approximate _prefix _j
 #}}}
 
 # ls/ps {{{

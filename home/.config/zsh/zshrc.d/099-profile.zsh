@@ -46,3 +46,7 @@ elif [[ -d "$TEXLIVE_BIN_x64" ]]; then
 fi
 export MANPATH="$TEXLIVE/texmf/doc/man:$MANPATH"
 export INFOPATH="$TEXLIVE/texmf/doc/info:$INFOPATH"
+
+# Load local configures
+[[ -f ~/.zshrc ]] && source ~/.zshrc
+[[ -f ~/.profile ]] && source ~/.profile

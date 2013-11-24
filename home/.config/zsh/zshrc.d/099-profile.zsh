@@ -1,3 +1,9 @@
+# homeshick
+if [[ -d "$HOME/.homesick/repos/homeshick" ]]; then
+    source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+    alias homesick=homeshick
+fi
+
 # phantomjs
 if [[ -d "$HOME/.phantomjs" ]]; then
     export PATH="$PATH:$HOME/.phantomjs/bin/"

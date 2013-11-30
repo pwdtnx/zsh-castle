@@ -11,7 +11,7 @@ __prompt_powerline_right_segment() {
     if [ ! -n "$1" ]; then
         return 0
     fi
-    echo -en "%{%F{$3}%}$RSF%{%F{$2}%K{$3}%} $1 "
+    echo -en "%{%F{$3}%}$RSF%{%K{$3}%F{$2}%} $1 "
 }
 # }}}
 
@@ -67,6 +67,16 @@ __prompt_powerline_pwd_segment() {
 }
 # }}}
 
+# Right segments {{{
+__prompt_powerline_date_segment() {
+    local prompt_date="%D{%H:%M:%S}"    # Datetime YYYY/mm/dd HH:MM
+    __prompt_powerline_right_segment "$prompt_date" $1 $2
+    return 0
+}
+__prompt_powerline_vcs_segment() {
+}
+# }}}
+
 __prompt_powerline_prompt() {
     local prompt_userinfo
     if [[ $UID -eq 0 ]]; then
@@ -79,12 +89,17 @@ __prompt_powerline_prompt() {
         prompt_userinfo=$(__prompt_powerline_userinfo_segment black blue "")
     fi
     __prompt_powerline_prompt_precmd() {
+        LANG=en_US.UTF-8
+        vcs_info 'powerline'
         local exitstate=$?
         local LSF='⮀'
         local LST='⮁'
+        local RSF='⮂'
+        local RST='⮃'
         local LOCK='⭤'
         local BRANCH='⭠'
         __prompt_powerline_prompt_bits=()
+        __prompt_powerline_rprompt_bits=()
         if [[ "$exitstate" != "0" ]]; then
             echo "exitstate: $exitstate"
             # display only when exitcode is higher than 0
@@ -93,17 +108,47 @@ __prompt_powerline_prompt() {
         fi
         __prompt_powerline_prompt_bits+=( \
             "$(__prompt_powerline_pwd_segment white black)") 
+        if [[ -n "$vcs_info_msg_0_" ]]; then
+            __prompt_powerline_rprompt_bits+=( \
+                "$(__prompt_powerline_right_segment $vcs_info_msg_0_ white cyan)") 
+        fi
+        __prompt_powerline_rprompt_bits+=( \
+            "$(__prompt_powerline_date_segment black yellow)") 
         __prompt_powerline_prompt_bits=${(j::)__prompt_powerline_prompt_bits}
+        __prompt_powerline_rprompt_bits=${(j::)__prompt_powerline_rprompt_bits}
         return 0
     }
     add-zsh-hook precmd __prompt_powerline_prompt_precmd
-    PROMPT="\$__prompt_powerline_prompt_upper_bits$prompt_userinfo\$__prompt_powerline_prompt_bits%{%k%}$LSF%{%b%f%} "
+    PROMPT="$prompt_userinfo\$__prompt_powerline_prompt_bits%{%k%}$LSF%{%b%f%} "
+    RPROMPT="\$__prompt_powerline_rprompt_bits%{%k%b%f%} "
     return 0
 }
+
+# VCS style {{{
+autoload -Uz is-at-least
+if is-at-least 4.3.10; then
+    autoload -Uz add-zsh-hook
+    autoload -Uz vcs_info
+
+    zstyle ':vcs_info:*:powerline:*' max-exports 1
+    zstyle ':vcs_info:*:powerline:*' unstagedstr '¹' 
+    zstyle ':vcs_info:*:powerline:*' stagedstr '²'
+    zstyle ':vcs_info:*:powerline:*' formats '%s %b%u%c'
+    zstyle ':vcs_info:*:powerline:*' actionformats '%s %b%u%c%a%f'
+    zstyle ':vcs_info:git:powerline:*' formats '± %b%u%c'
+    zstyle ':vcs_info:git:powerline:*' actionformats '± %b%u%c%a%f'
+    zstyle ':vcs_info:hg:powerline:*' formats '☿ %b%u%c'
+    zstyle ':vcs_info:hg:powerline:*' actionformats '☿ %b%u%c%a%f'
+    # stash format
+    zstyle ':vcs_info:git:powerline:*' stashformat "%s $RST"
+fi
+# }}}
 
 function() {
     local LSF='⮀'
     local LST='⮁'
+    local RSF='⮂'
+    local RST='⮃'
     local LOCK='⭤'
     local BRANCH='⭠'
 

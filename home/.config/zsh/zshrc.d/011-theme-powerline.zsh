@@ -89,7 +89,6 @@ __prompt_powerline_prompt() {
         prompt_userinfo=$(__prompt_powerline_userinfo_segment black blue "")
     fi
     __prompt_powerline_prompt_precmd() {
-        LANG=en_US.UTF-8
         vcs_info 'powerline'
         local exitstate=$?
         local LSF='⮀'

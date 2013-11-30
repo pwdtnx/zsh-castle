@@ -84,7 +84,7 @@ zstyle ':completion:*' verbose yes
 # - _approximate:   complete from approximate suggestions
 # - _prefix:        complete without caring the characters after carret
 zstyle ':completion:*' completer _oldlist _complete \
-    _match _history _ignored _approximate _prefix _j
+    _match _history _ignored _approximate _prefix
 #}}}
 
 # ls/ps {{{

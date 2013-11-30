@@ -97,7 +97,6 @@ __prompt_powerline_prompt() {
         local RSF='⮂'
         local RST='⮃'
         local LOCK='⭤'
-        local BRANCH='⭠'
         __prompt_powerline_prompt_bits=()
         __prompt_powerline_rprompt_bits=()
         if [[ "$exitstate" != "0" ]]; then
@@ -125,23 +124,24 @@ __prompt_powerline_prompt() {
 }
 
 # VCS style {{{
-autoload -Uz is-at-least
-if is-at-least 4.3.10; then
-    autoload -Uz add-zsh-hook
-    autoload -Uz vcs_info
-
-    zstyle ':vcs_info:*:powerline:*' max-exports 1
-    zstyle ':vcs_info:*:powerline:*' unstagedstr '¹' 
-    zstyle ':vcs_info:*:powerline:*' stagedstr '²'
-    zstyle ':vcs_info:*:powerline:*' formats '%s %b%u%c'
-    zstyle ':vcs_info:*:powerline:*' actionformats '%s %b%u%c%a%f'
-    zstyle ':vcs_info:git:powerline:*' formats '± %b%u%c'
-    zstyle ':vcs_info:git:powerline:*' actionformats '± %b%u%c%a%f'
-    zstyle ':vcs_info:hg:powerline:*' formats '☿ %b%u%c'
-    zstyle ':vcs_info:hg:powerline:*' actionformats '☿ %b%u%c%a%f'
-    # stash format
-    zstyle ':vcs_info:git:powerline:*' stashformat "%s $RST"
-fi
+function __prompt_powerline_vcsstyles() {
+    local branchfmt="$BRANCH %b%u%c"
+    local actionfmt="%a%f"
+    local git="±"
+    local hg="☿"
+    autoload -Uz is-at-least
+    if is-at-least 4.3.10; then
+        autoload -Uz vcs_info
+        zstyle ':vcs_info:*:powerline:*' unstagedstr '¹' 
+        zstyle ':vcs_info:*:powerline:*' stagedstr '²'
+        zstyle ':vcs_info:*:powerline:*' formats "$branchfmt(%s)"
+        zstyle ':vcs_info:*:powerline:*' actionformats "$branchfmt$actionfmt(%s)"
+        zstyle ':vcs_info:git:powerline:*' formats "$branchfmt"
+        zstyle ':vcs_info:git:powerline:*' actionformats "$branchfmt$actionfmt"
+        zstyle ':vcs_info:hg:powerline:*' formats "$branchfmt($hg)"
+        zstyle ':vcs_info:hg:powerline:*' actionformats "$branchfmt$actionfmt($hg)"
+    fi
+}
 # }}}
 
 function() {
@@ -152,5 +152,6 @@ function() {
     local LOCK='⭤'
     local BRANCH='⭠'
 
+    __prompt_powerline_vcsstyles
     __prompt_powerline_prompt
 }

@@ -187,25 +187,7 @@ _Z_DATA=$ZDOTDIR/.z
 Bundle rupa/z
 Bundle zsh-users/zsh-syntax-highlighting
 Bundle zsh-users/zsh-completions
-fpath=(${ZDOTDIR}/zsh-completions/src $fpath)
-
-# zsh-prompt-powerline {{{
-fpath=(${ZDOTDIR}/zsh-prompt-powerline $fpath)
-autoload promptinit; promptinit
-
-# only show username on remote server or if it's different from my default
-[[ -n $SSH_CONNECTION || $USER == alisue ]] && zstyle ':prompt:powerline:ps1' hide-user 1
-
-# enable check-for-changes
-zstyle :'vcs_info:*powerline:*' check-for-changes true
-
-zstyle ':prompt:powerline:ps1' sep1-char ''
-zstyle ':prompt:powerline:ps1' sep2-char ''
-zstyle ':prompt:powerline:ps1' lock-char ''
-zstyle ':prompt:powerline:ps1' branch-char ''
-
-prompt powerline
-#}}}
+##}}}
 
 # LS_COLORS {{{
 Bundle seebi/dircolors-solarized
@@ -219,5 +201,4 @@ fi
 if [ -n "$LS_COLORS" ]; then
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
-#}}}
 #}}}

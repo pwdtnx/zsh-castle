@@ -56,6 +56,8 @@ BundleLocal() {
         source ${bundle_root}/${name}/${name}.sh
     elif [[ -f "${bundle_root}/${name}/${name}" ]]; then
         source ${bundle_root}/${name}/${name}
+    elif [[ -f "${bundle_root}/${name}/src" ]]; then
+        fpath+=( ${bundle_root}/${name}/src )
     else
         fpath+=( ${bundle_root}/${name} )
     fi

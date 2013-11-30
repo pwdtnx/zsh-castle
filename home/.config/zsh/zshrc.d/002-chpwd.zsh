@@ -1,5 +1,6 @@
 chpwd() {
     ls_abbrev
+    return $?
 }
 ls_abbrev() {
     # -a : Do not ignore entries starting with ..
@@ -32,5 +33,6 @@ ls_abbrev() {
     else
         echo "$ls_result"
     fi
+    return 0
 }
 

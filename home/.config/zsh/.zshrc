@@ -151,8 +151,7 @@ function zle-line-finish () {
     echoti rmkx > /dev/null 2>&1
 }
 zle -N zle-line-init
-zle -N zle-line-finish  
-
+zle -N zle-line-finish
 
 # cycle history with C-p/C-n
 autoload history-search-end

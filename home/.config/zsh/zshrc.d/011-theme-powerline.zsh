@@ -89,7 +89,6 @@ __prompt_powerline_prompt() {
         prompt_userinfo=$(__prompt_powerline_userinfo_segment black blue "")
     fi
     __prompt_powerline_prompt_precmd() {
-        vcs_info 'powerline'
         local exitstate=$?
         local LSF='⮀'
         local LST='⮁'
@@ -98,18 +97,22 @@ __prompt_powerline_prompt() {
         local LOCK='⭤'
         __prompt_powerline_prompt_bits=()
         __prompt_powerline_rprompt_bits=()
-        if [[ "$exitstate" != "0" ]]; then
-            echo "exitstate: $exitstate"
+        # exit state
+        if [[ $exitstate > 0 ]]; then
             # display only when exitcode is higher than 0
             __prompt_powerline_prompt_bits+=( \
                 "$(__prompt_powerline_exitstate_segment white red $exitstate)")
         fi
+        # current directory
         __prompt_powerline_prompt_bits+=( \
             "$(__prompt_powerline_pwd_segment white black)") 
+        # version control system
+        vcs_info 'powerline'
         if [[ -n "$vcs_info_msg_0_" ]]; then
             __prompt_powerline_rprompt_bits+=( \
                 "$(__prompt_powerline_right_segment $vcs_info_msg_0_ white cyan)") 
         fi
+        # date
         __prompt_powerline_rprompt_bits+=( \
             "$(__prompt_powerline_date_segment black yellow)") 
         __prompt_powerline_prompt_bits=${(j::)__prompt_powerline_prompt_bits}

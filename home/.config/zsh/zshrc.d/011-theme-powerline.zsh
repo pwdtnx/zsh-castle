@@ -119,7 +119,7 @@ __prompt_powerline_prompt() {
     }
     add-zsh-hook precmd __prompt_powerline_prompt_precmd
     PROMPT="$prompt_userinfo\$__prompt_powerline_prompt_bits%{%k%}$LSF%{%b%f%} "
-    RPROMPT="\$__prompt_powerline_rprompt_bits%{%k%b%f%} "
+    RPROMPT="\$__prompt_powerline_rprompt_bits%{%k%b%f%}"
     return 0
 }
 

@@ -48,15 +48,17 @@ fi
 
 # Texlive 2011
 TEXLIVE="/usr/local/texlive/2011"
-TEXLIVE_BIN_x86="$TEXLIVE/bin/i386-linux"
-TEXLIVE_BIN_x64="$TEXLIVE/bin/x86_64-linux"
-if [[ -d "$TEXLIVE_BIN_x86" ]]; then
-    export PATH="$TEXLIVE_BIN_x87:$PATH"
-elif [[ -d "$TEXLIVE_BIN_x64" ]]; then
-    export PATH="$TEXLIVE_BIN_x64:$PATH"
+if [[ -d "$TEXLIVE" ]]; then
+    TEXLIVE_BIN_x86="$TEXLIVE/bin/i386-linux"
+    TEXLIVE_BIN_x64="$TEXLIVE/bin/x86_64-linux"
+    if [[ -d "$TEXLIVE_BIN_x86" ]]; then
+        export PATH="$TEXLIVE_BIN_x87:$PATH"
+    elif [[ -d "$TEXLIVE_BIN_x64" ]]; then
+        export PATH="$TEXLIVE_BIN_x64:$PATH"
+    fi
+    export MANPATH="$TEXLIVE/texmf/doc/man:$MANPATH"
+    export INFOPATH="$TEXLIVE/texmf/doc/info:$INFOPATH"
 fi
-export MANPATH="$TEXLIVE/texmf/doc/man:$MANPATH"
-export INFOPATH="$TEXLIVE/texmf/doc/info:$INFOPATH"
 
 # Load local configures
 [[ -f ~/.profile ]] && source ~/.profile

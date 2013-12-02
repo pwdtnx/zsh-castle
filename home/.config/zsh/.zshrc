@@ -9,6 +9,11 @@ if [[ "${TERM}" = "linux" ]]; then
     LANG=C
 fi
 
+# create ZDOTDIR if not exists
+if [[ ! -d "$ZDOTDIR" ]]; then
+    mkdir -p "$ZDOTDIR"
+fi
+
 # report time when the process takes over 3 seconds
 REPORTTIME=3
 
@@ -174,27 +179,17 @@ zle -A .backward-delete-char vi-backward-delete-char
 # }}}
 
 # Load extra settings and plugins {{{
+[[ -f "$HOME/.zshrc" ]] && source "$HOME/.zshrc"
+
+# plugins and extra settings
 for filename in ${ZDOTDIR}/zshrc.d/*.zsh; do
     source ${filename}
 done
 
+# bundles
 _Z_CMD=j
 _Z_DATA=$ZDOTDIR/.z
 Bundle rupa/z
 Bundle zsh-users/zsh-syntax-highlighting
 Bundle zsh-users/zsh-completions
 ##}}}
-
-# LS_COLORS {{{
-Bundle seebi/dircolors-solarized
-export LS_COLORS
-DIRCOLORS="${ZDOTDIR}/bundle/dircolors-solarized/dircolors.ansi-dark"
-if type dircolors > /dev/null 2>&1; then
-    eval $(dircolors ${DIRCOLORS})
-elif type gdircolors > /dev/null 2>&1; then
-    eval $(gdircolors ${DIRCOLORS})
-fi
-if [ -n "$LS_COLORS" ]; then
-    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-fi
-#}}}

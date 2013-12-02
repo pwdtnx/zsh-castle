@@ -1,4 +1,9 @@
-ls_abbrev() {
+#
+# ls command with rows number limitation
+#
+# Ref: http://qiita.com/yuyuchu3333/items/b10542db482c3ac8b059
+#
+abbrls() {
     # -a : Do not ignore entries starting with ..
     # -C : Force multi-column output.
     # -F : Append indicator (one of */=>@|) to entries.
@@ -29,11 +34,4 @@ ls_abbrev() {
     else
         echo "$ls_result"
     fi
-}
-function() {
-    function __autols() {
-        ls_abbrev
-    }
-    autoload -Uz add-zsh-hook
-    add-zsh-hook chpwd __autols
 }

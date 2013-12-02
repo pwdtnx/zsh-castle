@@ -1,4 +1,4 @@
-function google() {
+google() {
     local str opt
     if [[ $ != 0 ]]; then
         for i in $*; do

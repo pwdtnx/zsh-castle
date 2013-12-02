@@ -14,6 +14,11 @@ if type hub > /dev/null 2>&1; then
     alias git="hub"
 fi
 
+# xdg-open
+if type xdg-open > /dev/null 2>&1; then
+    alias open="xdg-open"
+fi
+
 # bpython
 if type bpython > /dev/null 2>&1; then
     alias python="bpython"
@@ -54,5 +59,4 @@ export MANPATH="$TEXLIVE/texmf/doc/man:$MANPATH"
 export INFOPATH="$TEXLIVE/texmf/doc/info:$INFOPATH"
 
 # Load local configures
-[[ -f ~/.zshrc ]] && source ~/.zshrc
 [[ -f ~/.profile ]] && source ~/.profile

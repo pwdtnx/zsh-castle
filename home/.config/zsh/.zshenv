@@ -12,7 +12,9 @@ path=(
     /opt/local/bin(N-/)
     /usr/local/bin(N-/)
     /usr/bin(N-/)
-    /bin(N-/))
+    /bin(N-/)
+    # Mac OS X
+    /usr/X11/bin(N-/))
 
 # -x: do export SUDO_PATH same time
 # -T: connect SUDO_PATH and sudo_path

@@ -8,9 +8,6 @@ setopt print_eight_bit
 if [[ "${TERM}" = "linux" ]]; then
     LANG=C
 fi
-if [[ ${UID} -eq 0 ]]; then 
-    LANG=C
-fi
 
 # report time when the process takes over 3 seconds
 REPORTTIME=3

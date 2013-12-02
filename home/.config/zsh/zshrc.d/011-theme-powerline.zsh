@@ -1,6 +1,23 @@
 # vim: set fileencoding=utf-8 ft=zsh
 
 # Utility {{{
+__prompt_powerline_set_variables() {
+    if [[ "$LANG" =~ "UTF-8$" ]]; then
+        LSF='⮀'
+        LST='⮁'
+        RSF='⮂'
+        RST='⮃'
+        LOCK='⭤'
+        BRANCH='⭠'
+    else
+        LSF=''
+        LST='|'
+        RSF=''
+        RST='|'
+        LOCK='*'
+        BRANCH='&'
+    fi
+}
 __prompt_powerline_left_segment() {
     if [ ! -n "$1" ]; then
         return 0
@@ -90,11 +107,8 @@ __prompt_powerline_prompt() {
     fi
     __prompt_powerline_prompt_precmd() {
         local exitstate=$?
-        local LSF='⮀'
-        local LST='⮁'
-        local RSF='⮂'
-        local RST='⮃'
-        local LOCK='⭤'
+        local LSF LST RSF RST LOCK BRANCH
+        __prompt_powerline_set_variables
         __prompt_powerline_prompt_bits=()
         __prompt_powerline_rprompt_bits=()
         # exit state
@@ -129,8 +143,6 @@ __prompt_powerline_prompt() {
 function __prompt_powerline_vcsstyles() {
     local branchfmt="$BRANCH %b%u%c"
     local actionfmt="%a%f"
-    local git="±"
-    local hg="☿"
     autoload -Uz is-at-least
     if is-at-least 4.3.10; then
         autoload -Uz vcs_info
@@ -138,21 +150,19 @@ function __prompt_powerline_vcsstyles() {
         zstyle ':vcs_info:*:powerline:*' stagedstr '²'
         zstyle ':vcs_info:*:powerline:*' formats "$branchfmt(%s)"
         zstyle ':vcs_info:*:powerline:*' actionformats "$branchfmt$actionfmt(%s)"
+        # I mainly use git so do not show vcs type
         zstyle ':vcs_info:git:powerline:*' formats "$branchfmt"
         zstyle ':vcs_info:git:powerline:*' actionformats "$branchfmt$actionfmt"
-        zstyle ':vcs_info:hg:powerline:*' formats "$branchfmt($hg)"
-        zstyle ':vcs_info:hg:powerline:*' actionformats "$branchfmt$actionfmt($hg)"
     fi
 }
 # }}}
 
 function() {
-    local LSF='⮀'
-    local LST='⮁'
-    local RSF='⮂'
-    local RST='⮃'
-    local LOCK='⭤'
-    local BRANCH='⭠'
+    # enable variable extraction in prompt
+    setopt prompt_subst
+
+    local LSF LST RSF RST LOCK BRANCH
+    __prompt_powerline_set_variables
 
     __prompt_powerline_vcsstyles
     __prompt_powerline_prompt

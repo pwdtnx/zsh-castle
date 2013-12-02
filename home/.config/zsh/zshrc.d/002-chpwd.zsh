@@ -1,7 +1,3 @@
-chpwd() {
-    ls_abbrev
-    return $?
-}
 ls_abbrev() {
     # -a : Do not ignore entries starting with ..
     # -C : Force multi-column output.
@@ -33,6 +29,11 @@ ls_abbrev() {
     else
         echo "$ls_result"
     fi
-    return 0
 }
-
+function() {
+    function __autols() {
+        ls_abbrev
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook chpwd __autols
+}

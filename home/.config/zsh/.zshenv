@@ -83,6 +83,11 @@ if type gsed > /dev/null 2>&1; then
 fi
 
 ## vim
+if [[ -e /Applications/MacVim.app/Contents/MacOS/Vim ]]; then
+    alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+    alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+fi
+
 export EDITOR=vim
 if ! type vim > /dev/null 2>&1; then
     alias vim=vi

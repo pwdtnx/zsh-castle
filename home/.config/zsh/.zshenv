@@ -1,3 +1,5 @@
+LANG=en_US.UTF-8
+
 # ignore duplicated path
 typeset -U path
 

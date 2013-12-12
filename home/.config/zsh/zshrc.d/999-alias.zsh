@@ -1,6 +1,10 @@
 # homeshick
 if [[ -d "$HOME/.homesick/repos/homeshick" ]]; then
     source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+    # if homesick is not installed, add alias
+    if ! type homesick > /dev/null 2>&1; then
+        alias homesick="homeshick"
+    fi
 fi
 
 # phantomjs
@@ -18,11 +22,6 @@ if type xdg-open > /dev/null 2>&1; then
     alias open="xdg-open"
 fi
 
-# bpython
-if type bpython > /dev/null 2>&1; then
-    alias python="bpython"
-fi
-
 # cabal
 if [[ -d "$HOME/.cabal/bin" ]]; then
     export PATH="$HOME/.cabal/bin:$PATH"
@@ -38,6 +37,14 @@ if [[ -d "$HOME/.pythonbrew" ]]; then
     source "$HOME/.pythonbrew/etc/bashrc"
     alias mkvirtualenv="pythonbrew venv create"
     alias workon="pythonbrew venv use"
+fi
+
+# pyenv
+if [[ -d "$HOME/.pyenv" ]]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    # enable completion
+    eval "$($PYENV_ROOT/bin/pyenv init -)"
 fi
 
 # homebrew - npm

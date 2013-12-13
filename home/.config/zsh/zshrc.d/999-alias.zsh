@@ -1,6 +1,10 @@
 # homeshick
 if [[ -d "$HOME/.homesick/repos/homeshick" ]]; then
     source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+    # if homesick is not installed, add alias
+    if ! type homesick > /dev/null 2>&1; then
+        alias homesick="homeshick"
+    fi
 fi
 
 # hub

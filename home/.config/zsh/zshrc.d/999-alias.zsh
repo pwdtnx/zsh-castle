@@ -12,6 +12,11 @@ if type hub > /dev/null 2>&1; then
     alias git="hub"
 fi
 
+# nodebrew
+if [[ -d "$HOME/.nodebrew" ]]; then
+    export PATH="$HOME/.nodebrew/current/bin:$PATH"
+fi
+
 # anyenv
 if [[ -d "$HOME/.anyenv/bin" ]]; then
     export PATH="$HOME/.anyenv/bin:$PATH"

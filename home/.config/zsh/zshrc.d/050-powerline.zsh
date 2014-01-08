@@ -75,6 +75,11 @@ __prompt_powerline_vimode_segment() {
         main|viins)
             name="INSERT"
             color=$3;;
+        *)
+            # initially $KEYMAP does not have value so use INSERT
+            # as a default mode
+            name="INSERT"
+            color=$3;;
     esac
     # display mode
     echo -en "%{%F{$color}%}"

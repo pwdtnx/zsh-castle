@@ -47,6 +47,16 @@ if [[ -d "$HOME/.pyenv" ]]; then
     eval "$($PYENV_ROOT/bin/pyenv init -)"
 fi
 
+# trash-cli
+if type trash-put > /dev/null 2>&1; then
+    alias rm="trash-put"
+else
+    echo "'trash-cli' is not found. Please install it with the following command"
+    echo
+    echo "  % pip install trash-cli"
+    echo
+fi
+
 # homebrew - npm
 if [[ -d "/usr/local/share/npm/bin" ]]; then
     export PATH="/usr/local/share/npm/bin:$PATH"

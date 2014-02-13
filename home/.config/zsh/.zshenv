@@ -28,10 +28,11 @@ if [[ $(id -u) -eq 0 ]]; then
 fi
 
 # Add completion path
-fpath=($HOME/.homesick/repos/homeshick/completions(N-/) $fpath)
-# Add function path
-let version=$(zsh --version | awk '{print $2}')
-fpath=(/usr/local/share/zsh/$VERSION/functions(N-/) ${fpath})
+version=$(zsh --version | awk '{print $2}')
+fpath=(
+    $HOME/.homesick/repos/homeshick/completions(N-/)
+    /usr/local/share/zsh/$version/functions(N-/)
+    $fpath)
 
 typeset -U manpath
 manpath=(

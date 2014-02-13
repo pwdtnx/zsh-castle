@@ -45,6 +45,11 @@ if [[ -d "$HOME/.pyenv" ]]; then
     export PATH="$PYENV_ROOT/bin:$PATH"
     # enable completion
     eval "$($PYENV_ROOT/bin/pyenv init -)"
+
+    # Add MANPATH
+    # It is not automatically configured so just add man path of 2.7.6
+    export MANPATH="$PYENV_ROOT/versions/2.7.6/share/man:$MANPATH"
+
 fi
 
 # trash-cli

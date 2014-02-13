@@ -29,6 +29,9 @@ fi
 
 # Add completion path
 fpath=($HOME/.homesick/repos/homeshick/completions(N-/) $fpath)
+# Add function path
+let version=$(zsh --version | awk '{print $2}')
+fpath=(/usr/local/share/zsh/$VERSION/functions(N-/) ${fpath})
 
 typeset -U manpath
 manpath=(

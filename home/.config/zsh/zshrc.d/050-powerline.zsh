@@ -5,7 +5,7 @@ zstyle ":prompt:powerline:colors" pwd-background 5
 
 zstyle ":prompt:powerline:colors" userinfo-foreground-root 7
 zstyle ":prompt:powerline:colors" userinfo-background-root 1
-zstyle ":prompt:powerline:colors" userinfo-foreground 8
+zstyle ":prompt:powerline:colors" userinfo-foreground 7
 zstyle ":prompt:powerline:colors" userinfo-background 2
 
 zstyle ":prompt:powerline:userinfo" default-username 'alisue'
@@ -104,13 +104,13 @@ zle -N zle-keymap-select
 __prompt_powerline_userinfo_segment() {
     local LST
     zstyle -s ":prompt:powerline:symbols" left-separator-thin LST
-    local host
+    local host=""
     if [ -n "${REMOTEHOST}${SSH_CONNECTION}" ]; then
         # show hostname only when user is connected to remote machine
         # %m -- short machine name
         host="%m"
     fi
-    local user
+    local user=""
     if [[ "$USER" != "$3" ]]; then
         # show username only when username is different from default
         # %n -- user name

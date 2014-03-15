@@ -24,6 +24,11 @@ if [[ -d "$HOME/.nodebrew" ]]; then
     export FPATH="$HOME/.nodebrew/completions/zsh:$FPATH"
 fi
 
+# TypeScript
+if type tvm > /dev/null 2>&1; then
+    export PATH=$(which tvm | sed -e "s/bin/lib\/node_modules/")/current/bin:$PATH
+fi
+
 # pythonbrew
 if [[ -d "$HOME/.pythonbrew" ]]; then
     source "$HOME/.pythonbrew/etc/bashrc"

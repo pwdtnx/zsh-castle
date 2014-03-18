@@ -22,6 +22,7 @@ function() {
     }
     autoload -Uz add-zsh-hook
     add-zsh-hook chpwd __anyenv
+    __anyenv
 }
 
 # node modules
@@ -33,6 +34,7 @@ function() {
     }
     autoload -Uz add-zsh-hook
     add-zsh-hook chpwd __track_path_to_node_version
+    __track_path_to_node_version
 }
 
 # TypeScript

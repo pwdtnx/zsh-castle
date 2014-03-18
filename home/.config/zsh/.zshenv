@@ -34,6 +34,7 @@ function() {
     }
     autoload -Uz add-zsh-hook
     add-zsh-hook chpwd __track_path
+    __track_path
 }
 
 # Add completion path

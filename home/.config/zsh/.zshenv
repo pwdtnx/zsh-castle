@@ -1,33 +1,43 @@
 LANG=en_US.UTF-8
 
-# ignore duplicated path
-typeset -U path
 
-# (N-/): do not register if the directory is not exists
-#  N: NULL_GLOB option (ignore path if the path does not match the glob)
-#  -: follow the symbol links
-#  /: ignore files
-path=(
-    $HOME/.local/bin(N-/)
-    $HOME/.gem/ruby/*/bin(N-/)
-    /var/lib/gems/*/bin(N-/)
-    /opt/local/bin(N-/)
-    /usr/local/bin(N-/)
-    /usr/bin(N-/)
-    /bin(N-/)
-    # Mac OS X
-    /usr/X11/bin(N-/))
+function() {
+    __track_path() {
+        echo "path track"
 
-# -x: do export SUDO_PATH same time
-# -T: connect SUDO_PATH and sudo_path
-typeset -xT SUDO_PATH sudo_path
-typeset -U sudo_path
-sudo_path=({,/usr/pkg,/usr/local,/usr}/sbin(N-/))
+        # ignore duplicated path
+        typeset -U path
 
-# add sudo_path to path when the login user is root
-if [[ $(id -u) -eq 0 ]]; then
-    path=($sudo_path $path)
-fi
+        # -x: do export SUDO_PATH same time
+        # -T: connect SUDO_PATH and sudo_path
+        typeset -xT SUDO_PATH sudo_path
+        typeset -U sudo_path
+
+        # (N-/): do not register if the directory is not exists
+        #  N: NULL_GLOB option (ignore path if the path does not match the glob)
+        #  -: follow the symbol links
+        #  /: ignore files
+        path=(
+            $HOME/.local/bin(N-/)
+            $HOME/.gem/ruby/*/bin(N-/)
+            /var/lib/gems/*/bin(N-/)
+            /opt/local/bin(N-/)
+            /usr/local/bin(N-/)
+            /usr/bin(N-/)
+            /bin(N-/)
+            # Mac OS X
+            /usr/X11/bin(N-/))
+
+        sudo_path=({,/usr/pkg,/usr/local,/usr}/sbin(N-/))
+
+        # add sudo_path to path when the login user is root
+        if [[ $(id -u) -eq 0 ]]; then
+            path=($sudo_path $path)
+        fi
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook chpwd __track_path
+}
 
 # Add completion path
 version=$(zsh --version | awk '{print $2}')

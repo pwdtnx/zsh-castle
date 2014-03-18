@@ -14,39 +14,26 @@ fi
 
 # anyenv
 if [[ -d "$HOME/.anyenv/bin" ]]; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
+    typeset -U path
+    path=($HOME/.anyenv/bin $path) 
     eval "$(anyenv init - zsh)"
 fi
 
-# nodebrew
-if [[ -d "$HOME/.nodebrew" ]]; then
-    export PATH="./node_modules/.bin:$HOME/.nodebrew/current/bin:$PATH"
-    export FPATH="$HOME/.nodebrew/completions/zsh:$FPATH"
-fi
+# node modules
+function() {
+    _track_path_to_node_version() {
+        if type npm > /dev/null 2>&1; then
+            path=( $(npm bin)(N-/) $(npm bin -g)(N-/) $path )
+            typeset -U path
+        fi
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook chpwd _track_path_to_node_version
+}
 
 # TypeScript
 if type tvm > /dev/null 2>&1; then
     export PATH=$(which tvm | sed -e "s/bin/lib\/node_modules/")/current/bin:$PATH
-fi
-
-# pythonbrew
-if [[ -d "$HOME/.pythonbrew" ]]; then
-    source "$HOME/.pythonbrew/etc/bashrc"
-    alias mkvirtualenv="pythonbrew venv create"
-    alias workon="pythonbrew venv use"
-fi
-
-# pyenv
-if [[ -d "$HOME/.pyenv" ]]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    # enable completion
-    eval "$($PYENV_ROOT/bin/pyenv init -)"
-
-    # Add MANPATH
-    # It is not automatically configured so just add man path of 2.7.6
-    export MANPATH="$PYENV_ROOT/versions/2.7.6/share/man:$MANPATH"
-
 fi
 
 # trash-cli

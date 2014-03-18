@@ -13,22 +13,26 @@ if type hub > /dev/null 2>&1; then
 fi
 
 # anyenv
-if [[ -d "$HOME/.anyenv/bin" ]]; then
-    typeset -U path
-    path=($HOME/.anyenv/bin $path) 
-    eval "$(anyenv init - zsh)"
-fi
-
-# node modules
 function() {
-    _track_path_to_node_version() {
-        if type npm > /dev/null 2>&1; then
-            path=( $(npm bin)(N-/) $(npm bin -g)(N-/) $path )
-            typeset -U path
+    __anyenv() {
+        if [[ -d "$HOME/.anyenv/bin" ]]; then
+            path=("$HOME/.anyenv/bin"(N-/) $path) 
+            eval "$(anyenv init - zsh)"
         fi
     }
     autoload -Uz add-zsh-hook
-    add-zsh-hook chpwd _track_path_to_node_version
+    add-zsh-hook chpwd __anyenv
+}
+
+# node modules
+function() {
+    __track_path_to_node_version() {
+        if type npm > /dev/null 2>&1; then
+            path=( $(npm bin)(N-/) $(npm bin -g)(N-/) $path )
+        fi
+    }
+    autoload -Uz add-zsh-hook
+    add-zsh-hook chpwd __track_path_to_node_version
 }
 
 # TypeScript
